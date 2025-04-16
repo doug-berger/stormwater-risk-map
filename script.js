@@ -14,7 +14,7 @@ const mapOptions = {
     zoom: 9.92,
     style: 'mapbox://styles/mapbox/dark-v11',
     maxBounds: [[-74.459, 40.277], [-73.500, 41.117]], 
-    pitch: 40
+    pitch: 20,
 
 };
 
@@ -34,8 +34,30 @@ function isWithinNYCBounds(lng, lat) {
            lat >= nycBounds.south && lat <= nycBounds.north;
 }
 
+function getFloodRiskStatus(lngLat, moderateData, extremeData) {
+    const point = turf.point(lngLat);
+    const buffer = turf.buffer(point, 25, { units: 'feet' });
+
+    let inModerate = false;
+    let inExtreme = false;
+
+    moderateData.features.forEach(feature => {
+        if (turf.booleanIntersects(buffer, feature)) inModerate = true;
+    });
+
+    extremeData.features.forEach(feature => {
+        if (turf.booleanIntersects(buffer, feature)) inExtreme = true;
+    });
+
+    if (inModerate) return 'high flood risk';
+    else if (inExtreme) return 'moderate flood risk';
+    else return 'low flood risk';
+}
+
+
 document.getElementById('search-button').addEventListener('click', async () => {
     const query = document.getElementById('search-input').value;
+
     if (!query) return;
 
     const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${mapboxgl.accessToken}&limit=1`;
@@ -51,26 +73,28 @@ document.getElementById('search-button').addEventListener('click', async () => {
 
         const [lng, lat] = data.features[0].center;
 
-        if (!isWithinNYCBounds(lng, lat)) {
-            alert('Address is outside of NYC. Please search within the five boroughs.');
-            return;
-        }
-
+        // Fly to location
         map.flyTo({
             center: [lng, lat],
             zoom: 15
         });
 
+        // Remove old marker if it exists
         if (searchMarker) {
-            searchMarker.setLngLat([lng, lat]);
-        } else {
-            searchMarker = new mapboxgl.Marker({
-                color: '#0E34A0',
-                draggable: false
-            })
+            searchMarker.remove();
+        }
+
+        // Add styled marker
+        searchMarker = new mapboxgl.Marker({ color: '#007cbf' })
             .setLngLat([lng, lat])
             .addTo(map);
-        }
+
+        // Calculate flood risk
+        const floodStatus = getFloodRiskStatus([lng, lat], moderateFloodData, extremeFloodData);
+
+        // Update sidebar
+        document.getElementById('flood-risk-text').textContent = `This location has a ${floodStatus}.`;
+        document.getElementById('resource-list').textContent = `Resources for a ${floodStatus} will appear here.`;
 
     } catch (error) {
         console.error('Geocoding error:', error);
@@ -78,7 +102,17 @@ document.getElementById('search-button').addEventListener('click', async () => {
     }
 });
 
-map.on('load', () => {
+let moderateFloodData, extremeFloodData;
+
+map.on('load', async () => {
+    // load flood zone geoJson data
+    const moderateResponse = await fetch('moderate_flood_simple.json');
+    moderateFloodData = await moderateResponse.json();
+
+    const extremeResponse = await fetch('extreme_flood_simple.json');
+    extremeFloodData = await extremeResponse.json();
+
+    // Add flood risk data to map
     map.addSource('moderateFlood', {
         type: 'geojson',
         data: 'moderate_flood_simple.json'
