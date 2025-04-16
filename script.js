@@ -11,8 +11,11 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGJlcmdlcjMyNCIsImEiOiJjbTkxejI1ODYwMGQ1Mmxvb
 const mapOptions = {
     container: 'map-container',
     center: [-73.99432, 40.71103],
-    zoom: 10.92,
+    zoom: 9.92,
     style: 'mapbox://styles/mapbox/dark-v11',
+    maxBounds: [[-74.459, 40.277], [-73.500, 41.117]], 
+    pitch: 40
+
 };
 
 const map = new mapboxgl.Map(mapOptions);
@@ -107,6 +110,23 @@ map.on('load', () => {
             'fill-outline-color': '#3399FF',
         }
     });
+
+    document.getElementById('toggle-moderate').addEventListener('change', (e) => {
+        map.setLayoutProperty(
+            'moderateFloodLayer',
+            'visibility',
+            e.target.checked ? 'visible' : 'none'
+        );
+    });
+    
+    document.getElementById('toggle-extreme').addEventListener('change', (e) => {
+        map.setLayoutProperty(
+            'extremeFloodLayer',
+            'visibility',
+            e.target.checked ? 'visible' : 'none'
+        );
+    });
+    
 });
 
 map.on('click', () => {
