@@ -36,7 +36,7 @@ function isWithinNYCBounds(lng, lat) {
 
 function getFloodRiskStatus(lngLat, moderateData, extremeData) {
     const point = turf.point(lngLat);
-    const buffer = turf.buffer(point, 25, { units: 'feet' });
+    const buffer = turf.buffer(point, 35, { units: 'feet' });
 
     let inModerate = false;
     let inExtreme = false;
@@ -94,7 +94,7 @@ document.getElementById('search-button').addEventListener('click', async () => {
 
         // Update sidebar
         document.getElementById('flood-risk-text').textContent = `This location has a ${floodStatus}.`;
-        document.getElementById('resource-list').textContent = `Resources for a ${floodStatus} will appear here.`;
+        document.getElementById('resource-list').textContent = `Resources for a ${floodStatus} zone will appear here.`;
 
     } catch (error) {
         console.error('Geocoding error:', error);
