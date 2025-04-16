@@ -7,18 +7,29 @@
     <title>Stormwater Flood Risk Map</title>
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Mapbox Geocoder plugin -->
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.1.2/mapbox-gl-geocoder.css" />
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.1.2/mapbox-gl-geocoder.min.js"></script>
+
 </head>
 
 <body>
     <div id="sidebar-container">
-        <div id="header"><h1>Understanding Your Flood Risk</h1>
-            <div id="header-subtitle">Use the search bar to find your property or business, and get customized resources to help you protect your livelihood.</div>
-            <div id ="search-bar">
+        <div id="header">
+            <h1>Understanding Your Flood Risk</h1>
+            <div id="header-subtitle">Use the search bar to find your property or business, and get customized resources
+                to help you protect your livelihood.</div>
+            <div id="search-bar">
                 <input type="text" id="search-input" placeholder="Enter your address here" />
-                <button id="search-button">Search</button> </div>
-                <hr class="sidebar-separator">
+                <button id="search-button">Search</button>
+            </div>
+            <hr class="sidebar-separator">
 
-        </div> 
+        </div>
         <div id="sidebar-interactive">
             <div id="sidebar-title">Your Flood Risk Profile:</div>
             <div id="sidebar-content">
@@ -30,15 +41,14 @@
                     <div id="resource-list"> Select a property on the map to see flood mitigation resources.
                     </div>
                 </div>
-                </div>
-            </div> 
+            </div>
         </div>
     </div>
-        <div id="map-container"></div>
+    </div>
+    <div id="map-container"></div>
 
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
-    <script src="data.js"></script>
     <script src="script.js"></script>
+
 </body>
 
 </html>
