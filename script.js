@@ -10,7 +10,7 @@ const map = new mapboxgl.Map({
 });
 
 let searchMarker;
-let moderateFloodData, extremeFloodData;
+let moderateFloodData, extremeFloodData, HundredYearFlood; 
 
 // NYC bounding box: [west, south, east, north]
 const nycBbox = [-74.25909, 40.477399, -73.700181, 40.917577];
@@ -94,6 +94,9 @@ map.on('load', async () => {
     const extremeResponse = await fetch('extreme_flood_simple.json');
     extremeFloodData = await extremeResponse.json();
 
+    const hundredYearResponse = await fetch('FEMA_100_Year_Dissolved.json');
+    const hundredYearFloodData = await hundredYearResponse.json();
+
     map.addSource('moderateFlood', {
         type: 'geojson',
         data: moderateFloodData
@@ -102,6 +105,11 @@ map.on('load', async () => {
     map.addSource('extremeFlood', {
         type: 'geojson',
         data: extremeFloodData
+    });
+    // Add 100-year flood data source
+    map.addSource('HundredYearFlood', {
+        type: 'geojson',
+        data: hundredYearFloodData
     });
 
     map.addLayer({
@@ -125,6 +133,29 @@ map.on('load', async () => {
             'fill-outline-color': '#3399FF',
         }
     });
+
+    map.addLayer({
+        id: 'HundredYearFloodLayer',
+        type: 'fill',
+        source: 'HundredYearFlood',
+        paint: {
+            'fill-color': '#C3423F',
+            'fill-opacity': 0.2,
+            'fill-outline-color': '#C3423F',
+        }
+    });
+
+    map.addLayer({
+        id: 'HundredYearFloodOutline',
+        type: 'line',
+        source: 'HundredYearFlood',
+        paint: {
+            'line-color': '#C3423F',
+            'line-opacity': 0.6, // <-- adjust this value for outline transparency
+            'line-width': 1
+        }
+    });
+    
 
     // Checkbox event listeners
     document.getElementById('toggle-moderate').addEventListener('change', (e) => {
@@ -150,4 +181,8 @@ map.on('click', () => {
         searchMarker.remove();
         searchMarker = null;
     }
+    // Reset sidebar text to placeholder content
+    document.getElementById('flood-risk-text').textContent = 'Select a property on the map to see flood risk information.';
+    document.getElementById('resource-list').textContent = 'Select a property on the map to see flood mitigation resources.';
 });
+
