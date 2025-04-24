@@ -1,33 +1,62 @@
 html,
 body {
     height: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent body scroll */
 }
 
 body {
     font-family: sans-serif;
-    margin: 0;
 }
 
+#flex-box {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar layout */
+#sidebar-container {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    background-color: white;
+    opacity: 0.9;
+    border-radius: 10px;
+    z-index: 10;
+    padding: 0;
+    max-width: 30%;
+    max-height: calc(100% - 8px); /* Account for top padding */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide scroll on the container */
+}
+
+/* Keep header fixed within the sidebar */
+#header {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    background-color: white;
+    flex-shrink: 0;
+}
+
+/* Scroll only this section */
+#sidebar-interactive {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* Map full screen */
 #map-container {
     background-color: gray;
     width: 100%;
     height: 100%;
 }
 
-#sidebar-container {
-    position: absolute;
-    top: 4px;
-    left: 10px;
-    background-color: white;
-    border-radius: 10px;
-    z-index: 10;
-    padding: 20px;
-    max-width: 300px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+/* --- Existing styles, unchanged below --- */
 
 #header h1 {
     font-size: 24px;
@@ -54,14 +83,11 @@ body {
     margin-bottom: 10px;
 }
 
-
-
 .mapboxgl-ctrl-geocoder {
     min-width: 100%;
     max-width: 100%;
     font-size: 14px;
 }
-
 
 #legend {
     font-size: 14px;
@@ -74,14 +100,6 @@ body {
     align-items: center;
     gap: 8px;
     margin-bottom: 5px;
-}
-
-
-.sidebar-separator {
-    border: none;
-    height: 2px;
-    background-color: #ccc;
-    margin: 15px 0;
 }
 
 #sidebar-title {
@@ -115,7 +133,30 @@ body {
     margin-top: 5px;
     font-style: italic;
     font-weight: normal;
-    margin: left
+}
+
+.flood-status-text {
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.flood-rec-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-style: normal;
+    color: black;
+}
+
+.flood-rec-text {
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+    font-style: normal;
+    font-weight: normal;
 }
 
 .legend-color {

@@ -21,6 +21,7 @@
 </head>
 
 <body>
+    <div id = "flex-box">
     <div id="sidebar-container">
         <div id="header">
             <h1>Understanding Your Flood Risk</h1>
@@ -40,10 +41,13 @@
                     <input type="checkbox" id="toggle-extreme" checked>
                     <span class="legend-color" style="background-color: #fde74c;"></span>
                     Extreme Flood Scenario
+                </label><br>
+                <label>
+                    <input type="checkbox" id="toggle-hundred" unchecked>
+                    <span class="legend-color" style="background-color: #C3423F;"></span>
+                    100-Year Floodplain
                 </label>
             </div>
-
-            <hr class="sidebar-separator">
 
         </div>
         <div id="sidebar-interactive">
@@ -60,9 +64,9 @@
             </div>
         </div>
     </div>
-    </div>
+    
     <div id="map-container"></div>
-
+</div>
     <script src="script.js" defer></script>
 
 </body>
