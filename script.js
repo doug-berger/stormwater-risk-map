@@ -52,21 +52,22 @@ function getFloodRiskStatus(lngLat, moderateData, extremeData, hundredYearData) 
     });
 
     let status;
-    if (inModerate) { 
+    if (inModerate && inHundredYear) {
+        status = `
+        <p class = "flood-status-text"> This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year. Combined, these two factors indicate a high risk of flooding.</p>`;
+    } else if (inExtreme && inHundredYear) {
+        status = `
+       <p class = "flood-status-text"> This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year.</p>`;
+
+    } else if (inModerate) {
         status = `
     <p class = "flood-status-text"> This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding.</p>`;
-     } else if (inExtreme) {
+    } else if (inExtreme) {
         status = `
         <p class = "flood-status-text"> This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall.. However, these events are expected to become more frequent in the future.</p>`;
     } else if (inHundredYear) {
         status = `
         <p class = "flood-status-text"> classThis area is located within the 100-year floodplain.</p>`;
-    } else if (inModerate && inHundredYear) {
-         status = `
-         <p class = "flood-status-text"> This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year. Combined, these two factors indicate a high risk of flooding.</p>`;
-    } else if (inExtreme && inHundredYear) {
-        status = `
-        <p class = "flood-status-text"> This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year.</p>`;
     } else status = ` <p class = "flood-status-text"> low flood risk </p>`;
 
     return { status, inHundredYear };
@@ -94,7 +95,7 @@ function getFloodRiskRec(lngLat, moderateData, extremeData, hundredYearData) {
 
     let Rec = ''; // Recommendations
 
-    if (inModerate) { 
+    if (inModerate) {
         Rec = `
         <h3 class="flood-rec-header"> Consider Purchasing flood insurance </h3> 
         <p class="flood-rec-text"> Flood protection is not included in standard homeowners or renter's insurance, but can be obtained as a separate policy. Go to <a href="https://floodhelpny.org" target="_blank" rel="noopener noreferrer">FloodHelpNY</a> 
@@ -107,7 +108,7 @@ function getFloodRiskRec(lngLat, moderateData, extremeData, hundredYearData) {
         <p class="flood-rec-text"> Consider installing flood barriers or flood gates to protect your property from stormwater flooding.</p>
         <h3 class="flood-rec-header"> Create a Flood Emergency Plan </h3>
         <p class="flood-rec-text"> Create a flood emergency plan for your property. This should include evacuation routes, emergency contacts, and a plan for securing your property.</p>`;
-     } else if (inExtreme) Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall.. However, these events are expected to become more frequent in the future.';
+    } else if (inExtreme) Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall.. However, these events are expected to become more frequent in the future.';
     else if (inHundredYear) Rec = 'This area is located within the 100-year floodplain.';
     else if (inModerate && inHundredYear) Rec = 'This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year. Combined, these two factors indicate a high risk of flooding.';
     else if (inExtreme && inHundredYear) Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year.';
@@ -158,7 +159,7 @@ geocoder.on('result', (e) => {
     document.getElementById('flood-risk-text').innerHTML = status;
     const { Rec } = getFloodRiskRec([lng, lat], moderateFloodData, extremeFloodData, hundredYearFloodData);
     document.getElementById('resource-list').innerHTML = Rec;
-    
+
 });
 
 // === Load GeoJSON and Add Layers ===

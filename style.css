@@ -1,12 +1,56 @@
+/* font-family: Kollektif */
+/* Kollektif font by Kollektif is licensed under the SIL Open Font License, 1.1. */
+/* This font is free for personal and commercial use. */
+
+@font-face {
+    font-family: 'Kollektif';
+    src: url(Fonts/Kollektif.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kollektif';
+    src: url(Fonts/Kollektif-Bold.ttf) format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kollektif';
+    src: url(Fonts/Kollektif-Italic.ttf) format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Kollektif';
+    src: url(Fonts/Kollektif-BoldItalic.ttf) format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* --- Global styles --- */
 html,
 body {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* Prevent body scroll */
+    overflow: hidden;
+    /* Prevent body scroll */
 }
 
 body {
-    font-family: sans-serif;
+    font-family: 'Kollektif', sans-serif;
+}
+
+#banner {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 20;
+    pointer-events: none;
+    /* so it doesn’t block clicks */
 }
 
 #flex-box {
@@ -19,35 +63,73 @@ body {
 /* Sidebar layout */
 #sidebar-container {
     position: absolute;
-    top: 4px;
-    left: 10px;
-    background-color: white;
-    opacity: 0.9;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Semi-transparent black */
     border-radius: 10px;
     z-index: 10;
-    padding: 0;
-    max-width: 30%;
-    max-height: calc(100% - 8px); /* Account for top padding */
+    padding: 10px;
+    max-width: 25%;
+    max-height: calc(95%);
+    /* 95% of the viewport height */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Hide scroll on the container */
+    overflow: hidden;
+    /* Hide scroll on the container */
 }
 
 /* Keep header fixed within the sidebar */
 #header {
-    padding: 20px;
-    border-bottom: 1px solid #ccc;
-    background-color: white;
+    border-bottom: 1px solid #ccccccce;
     flex-shrink: 0;
+    margin: 0 10px;
+    /* Add margin to prevent the border from reaching the edges */
 }
 
 /* Scroll only this section */
 #sidebar-interactive {
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
     flex-grow: 1;
+    min-height: 0;
 }
+
+/* Scrollbar track (the area behind the thumb) */
+#sidebar-interactive::-webkit-scrollbar {
+    width: 8px;
+    /* or whatever size you prefer */
+}
+
+/* Scrollbar thumb (the part you drag) */
+#sidebar-interactive::-webkit-scrollbar-thumb {
+    background-color: #879297;
+    /* light grey */
+    border-radius: 10px;
+    border: 2px solid black;
+    /* adds space around thumb if sidebar is dark */
+}
+
+/* Optional: scrollbar corner */
+#sidebar-interactive::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Optional: Scrollbar track */
+#sidebar-interactive::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+/* for Firefox */
+/* Note: Firefox uses a different syntax for custom scrollbars */
+#sidebar-interactive {
+    scrollbar-width: thin;
+    scrollbar-color: #879297 transparent;
+}
+
+
 
 /* Map full screen */
 #map-container {
@@ -59,15 +141,16 @@ body {
 /* --- Existing styles, unchanged below --- */
 
 #header h1 {
-    font-size: 24px;
+    font-size: 36px;
     font-weight: bold;
+    color: white;
 }
 
-#header_subtitle {
-    font-size: 14px;
-    color: gray;
-    margin-top: 5px;
-    margin-bottom: 10px;
+#header-subtitle p {
+    font-size: 16px;
+    color: white;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 #search-bar {
@@ -90,21 +173,93 @@ body {
 }
 
 #legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    padding: 15px;
     font-size: 14px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    color: white;
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: left;
 }
 
-#legend label {
+.legend-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.legend-label {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 5px;
+    width: 100%;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.legend-text {
+    display: inline-block;
+    /* space between color and text */
+}
+
+.legend-subtext {
+    font-size: 12px;
+    color: #ccc;
+    text-align: left;
+    margin-left: 58px;
+    margin-top: 2px;
+    display: block;
+    width: 100%;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid white;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+    margin-right: 8px;
+    position: relative;
+    vertical-align: middle;
+    transition: border-color 0.2s ease;
+    display: inline-block;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: white;
+    border-radius: 2px;
+    transform: translate(-50%, -50%);
+}
+
+
+
+
+input[type="checkbox"]:hover {
+    border-color: #99ddff;
 }
 
 #sidebar-title {
     font-size: 18px;
     font-weight: bold;
+    color: white;
     margin-bottom: 10px;
 }
 
@@ -124,7 +279,8 @@ body {
 #flood-risk-resources {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
+    color: white;
+    margin-bottom: 5px;
 }
 
 #resource-list {
@@ -137,7 +293,7 @@ body {
 
 .flood-status-text {
     font-size: 14px;
-    color: black;
+    color: white;
     margin-top: 5px;
     font-style: normal;
     font-weight: normal;
@@ -148,28 +304,26 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
     font-style: normal;
-    color: black;
+    color: white;
 }
 
 .flood-rec-text {
     font-size: 14px;
-    color: black;
+    color: white;
     margin-top: 5px;
     font-style: normal;
     font-weight: normal;
 }
 
-.legend-color {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    margin-right: 10px;
+a {
+    color: #3399FF;
+    text-decoration: none;
+    font-weight: normal;
+    transition: all 0.2s ease;
 }
 
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
+a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #99ddff
 }

@@ -5,14 +5,16 @@
     <meta charset="utf-8" />
     <title>Flood Map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    
+
     <!-- Mapbox CSS & JS -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
     <!-- Geocoder CSS & JS -->
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" />
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" />
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
 
     <!-- Turf.js (for spatial logic) -->
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
@@ -21,52 +23,71 @@
 </head>
 
 <body>
-    <div id = "flex-box">
-    <div id="sidebar-container">
-        <div id="header">
-            <h1>Understanding Your Flood Risk</h1>
-            <div id="header-subtitle">Use the search bar to find your property or business, and get customized resources
-                to help you protect your livelihood.</div>
-            <div id="search-bar">
-                <div id="geocoder" class="geocoder-container"></div>
+    <div id="banner">
 
-            </div>
-            <div id="legend">
-                <label>
-                    <input type="checkbox" id="toggle-moderate" checked>
-                    <span class="legend-color" style="background-color: #3399FF;"></span>
-                    Moderate Flood Scenario
-                </label><br>
-                <label>
-                    <input type="checkbox" id="toggle-extreme" checked>
-                    <span class="legend-color" style="background-color: #fde74c;"></span>
-                    Extreme Flood Scenario
-                </label><br>
-                <label>
-                    <input type="checkbox" id="toggle-hundred" unchecked>
-                    <span class="legend-color" style="background-color: #C3423F;"></span>
-                    100-Year Floodplain
-                </label>
-            </div>
-
-        </div>
-        <div id="sidebar-interactive">
-            <div id="sidebar-title">Your Flood Risk Profile:</div>
-            <div id="sidebar-content">
-                <div id="flood-risk-info">
-                    <p id="flood-risk-text">Select a property on the map to see flood risk information.</p>
+    </div>
+    <div id="flex-box">
+        <div id="sidebar-container">
+            <div id="header">
+                <h1>Understanding Your Flood Risk</h1>
+                <div id="header-subtitle">
+                    <p>Use the search bar to find your property or business, and get customized resources
+                        to help you protect your livelihood.</p>
                 </div>
-                <div id="flood-risk-resources">
-                    <h3>Resources:</h3>
-                    <div id="resource-list"> Select a property on the map to see flood mitigation resources.
+                <div id="search-bar">
+                    <div id="geocoder" class="geocoder-container"></div>
+
+                </div>
+
+            </div>
+            <div id="sidebar-interactive">
+                <div id="sidebar-title">Your Flood Risk Profile:</div>
+                <div id="sidebar-content">
+                    <div id="flood-risk-info">
+                        <p id="flood-risk-text">Select a property on the map to see flood risk information.</p>
+                    </div>
+                    <div id="flood-risk-resources">
+                        <h3>Resources:</h3>
+                        <div id="resource-list"> Select a property on the map to see flood mitigation resources.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div id="map-container"></div>
+
+        <div id="legend">
+            <div class="legend-item">
+                <label class="legend-label">
+                    <input type="checkbox" id="toggle-moderate" checked>
+                    <span class="legend-color" style="background-color: #3399FF;"></span>
+                    <span class="legend-text"> Moderate Flood Scenario </span>
+                </label>
+                <div class="legend-subtext">2.13 inches of rain per hour with current sea levels.</div>
+            </div>
+
+            <div class="legend-item">
+                <label class="legend-label">
+                    <input type="checkbox" id="toggle-extreme" checked>
+                    <span class="legend-color" style="background-color: #fde74c;"></span>
+                    <span class="legend-text"> Extreme Flood Scenario </span>
+                </label>
+                <div class="legend-subtext">3.66 inches of rain per hour with 2080 projected sea level rise.</div>
+            </div>
+
+            <div class="legend-item">
+                <label class="legend-label">
+                    <input type="checkbox" id="toggle-hundred">
+                    <span class="legend-color" style="background-color: #C3423F;"></span>
+                    <span class="legend-text"> 100-Year Floodplain </span>
+                </label>
+                <div class="legend-subtext">FEMA-defined zone with a 1% annual chance of flooding.</div>
+            </div>
+        </div>
+
+
     </div>
-    
-    <div id="map-container"></div>
-</div>
     <script src="script.js" defer></script>
 
 </body>
