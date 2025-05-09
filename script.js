@@ -1,10 +1,15 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGJlcmdlcjMyNCIsImEiOiJjbTkxejI1ODYwMGQ1MmxvbWZreDZhMGgxIn0.nfxxsMs9W6jzp0-Wo-OEZg';
 
+// Ensure Turf.js is imported
+if (typeof turf === 'undefined') {
+    console.error('Turf.js is not loaded. Please include Turf.js in your HTML file.');
+}
+
 const map = new mapboxgl.Map({
     container: 'map-container',
     center: [-73.99432, 40.71103],
     zoom: 9.92,
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/dberger324/cmag3wj1f013801s03teu7bom',
     maxBounds: [[-74.459, 40.277], [-73.500, 41.117]],
     pitch: 20,
 });
@@ -48,26 +53,50 @@ function getFloodRiskStatus(lngLat, moderateData, extremeData, hundredYearData) 
     });
 
     hundredYearData.features.forEach(feature => {
-        if (turf.booleanPointInPolygon(point, feature)) inHundredYear = true;
+        if (turf.booleanIntersects(buffer, feature)) inHundredYear = true;
     });
 
     let status;
     if (inModerate && inHundredYear) {
         status = `
-        <p class = "flood-status-text"> This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year. Combined, these two factors indicate a high risk of flooding.</p>`;
+        <p class = "flood-status-text"> This location would likely experience stormwater flooding under a 
+        moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated 
+        risk of stormwater flooding. It is also located within the 100-year floodplain. This means that there 
+        is at least a 1% chance of flooding from a coastal storm in any given year. Your actual risk may be higher.
+         <a href="https://www.nyc.gov/site/floodmaps/about/about-flood-maps.page" target="_blank" rel="noopener noreferrer">Click here</a> 
+         for more information on FEMA flood zones. Combined, these two factors indicate a high risk of flooding. 
+         <a href="https://climate.cityofnewyork.us/challenges/extreme-rainfall/" target="_blank" rel="noopener noreferrer">Learn more about extreme rainfall and stormwater flooding.</a></p>`; 
+
     } else if (inExtreme && inHundredYear) {
         status = `
-       <p class = "flood-status-text"> This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year.</p>`;
+       <p class = "flood-status-text"> This location would likely experience stormwater flooding under an extreme 
+       stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means 
+       this area would likely only experience stormwater flooding with extremely high rainfall. 
+       However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. 
+       This means that there is at least a 1% chance of flooding from a coastal storm in any given year. Your actual risk may be higher. 
+       <a href="https://www.nyc.gov/site/floodmaps/about/about-flood-maps.page" target="_blank" rel="noopener noreferrer">Click here</a> 
+       for more information on FEMA flood zones. <a href="https://climate.cityofnewyork.us/challenges/extreme-rainfall/" target="_blank" rel="noopener noreferrer">Learn more about extreme rainfall and stormwater flooding.</a></p>`;
 
     } else if (inModerate) {
         status = `
-    <p class = "flood-status-text"> This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding.</p>`;
+    <p class = "flood-status-text"> This location would likely experience stormwater flooding under a moderate stormwater 
+    flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding. 
+    <a href="https://climate.cityofnewyork.us/challenges/extreme-rainfall/" target="_blank" rel="noopener noreferrer">Learn more about extreme rainfall and stormwater flooding.</a></p>`;
+
     } else if (inExtreme) {
         status = `
-        <p class = "flood-status-text"> This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall.. However, these events are expected to become more frequent in the future.</p>`;
+        <p class = "flood-status-text"> This location would likely experience stormwater flooding under 
+        an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). 
+        This means this area would likely only experience stormwater flooding with extremely high rainfall. 
+        However, these events are expected to become more frequent in the future. 
+        <a href="https://climate.cityofnewyork.us/challenges/extreme-rainfall/" target="_blank" rel="noopener noreferrer">Learn more about extreme rainfall and stormwater flooding.</a></p>`;
+        
     } else if (inHundredYear) {
         status = `
-        <p class = "flood-status-text"> classThis area is located within the 100-year floodplain.</p>`;
+        <p class = "flood-status-text"> This area is located within the 100-year floodplain. This means that there 
+        is at least a 1% chance of flooding from a coastal storm in any given year. Your actual risk may be higher. 
+        <a href="https://www.nyc.gov/site/floodmaps/about/about-flood-maps.page" target="_blank" rel="noopener noreferrer">Click here</a> 
+        for more information on FEMA flood zones.</p>`;
     } else status = ` <p class = "flood-status-text"> low flood risk </p>`;
 
     return { status, inHundredYear };
@@ -90,16 +119,15 @@ function getFloodRiskRec(lngLat, moderateData, extremeData, hundredYearData) {
     });
 
     hundredYearData.features.forEach(feature => {
-        if (turf.booleanPointInPolygon(point, feature)) inHundredYear = true;
+        if (turf.booleanIntersects(buffer, feature)) inHundredYear = true;
     });
 
     let Rec = ''; // Recommendations
 
-    if (inModerate) {
+    if (inModerate && inHundredYear) {
         Rec = `
-        <h3 class="flood-rec-header"> Consider Purchasing flood insurance </h3> 
-        <p class="flood-rec-text"> Flood protection is not included in standard homeowners or renter's insurance, but can be obtained as a separate policy. Go to <a href="https://floodhelpny.org" target="_blank" rel="noopener noreferrer">FloodHelpNY</a> 
-        to learn more about flood insurance. Even if you are not in a FEMA flood zone, you may be at risk from stormwater flooding.</p>
+        <h3 class="flood-rec-header"> Consider Purchasing Flood Insurance </h3> 
+        <p class="flood-rec-text"> Flood protection is not included in standard homeowners or renter's insurance, but can be obtained as a separate policy. Go to <a href="https://floodhelpny.org" target="_blank" rel="noopener noreferrer">FloodHelpNY</a> to learn more about flood insurance. Even if you are not in a FEMA flood zone, you may be at risk from stormwater flooding.</p>
         <h3 class="flood-rec-header"> Apply for the Business Preparedness and Resiliency Program (PREP) Risk Assessment and Grant Program </h3>
         <p class="flood-rec-text"> The NYC Department of Small Business Services (SBS) offers a grant program to help small businesses assess their flood risk and implement mitigation measures. Go to <a href="https://www.nyc.gov/site/sbs/businesses/preparedness-and-resiliency-program.page" target="_blank" rel="noopener noreferrer">SBS PREP</a> for more information.</p>
         <h3 class="flood-rec-header"> Elevate Important Documents and Equipment </h3>
@@ -108,13 +136,35 @@ function getFloodRiskRec(lngLat, moderateData, extremeData, hundredYearData) {
         <p class="flood-rec-text"> Consider installing flood barriers or flood gates to protect your property from stormwater flooding.</p>
         <h3 class="flood-rec-header"> Create a Flood Emergency Plan </h3>
         <p class="flood-rec-text"> Create a flood emergency plan for your property. This should include evacuation routes, emergency contacts, and a plan for securing your property.</p>`;
-    } else if (inExtreme) Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall.. However, these events are expected to become more frequent in the future.';
-    else if (inHundredYear) Rec = 'This area is located within the 100-year floodplain.';
-    else if (inModerate && inHundredYear) Rec = 'This location would likely experience stormwater flooding under a moderate stormwater flooding scenario (2.13 inches per hour of rain). This represents an elevated risk of stormwater flooding. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year. Combined, these two factors indicate a high risk of flooding.';
-    else if (inExtreme && inHundredYear) Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year.';
-    else Rec = 'low flood risk';
-
+    
+    } else if (inExtreme && inHundredYear) {
+        Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future. It is also located within the 100-year floodplain. This means that there is a 1% chance of flooding from a coastal storm in any given year.';
+    
+    } else if (inModerate) {
+        Rec = `
+        <h3 class="flood-rec-header"> Consider Purchasing Flood Insurance </h3> 
+        <p class="flood-rec-text"> Flood protection is not included in standard homeowners or renter's insurance, but can be obtained as a separate policy. Go to <a href="https://floodhelpny.org" target="_blank" rel="noopener noreferrer">FloodHelpNY</a> to learn more about flood insurance. Even if you are not in a FEMA flood zone, you may be at risk from stormwater flooding.</p>
+        <h3 class="flood-rec-header"> Apply for the Business Preparedness and Resiliency Program (PREP) Risk Assessment and Grant Program </h3>
+        <p class="flood-rec-text"> The NYC Department of Small Business Services (SBS) offers a grant program to help small businesses assess their flood risk and implement mitigation measures. Go to <a href="https://www.nyc.gov/site/sbs/businesses/preparedness-and-resiliency-program.page" target="_blank" rel="noopener noreferrer">SBS PREP</a> for more information.</p>
+        <h3 class="flood-rec-header"> Elevate Important Documents and Equipment </h3>
+        <p class="flood-rec-text"> Consider elevating important documents and equipment to reduce the risk of damage.</p>
+        <h3 class="flood-rec-header"> Install Flood Barriers </h3>
+        <p class="flood-rec-text"> Consider installing flood barriers or flood gates to protect your property from stormwater flooding.</p>
+        <h3 class="flood-rec-header"> Create a Flood Emergency Plan </h3>
+        <p class="flood-rec-text"> Create a flood emergency plan for your property. This should include evacuation routes, emergency contacts, and a plan for securing your property.</p>`;
+    
+    } else if (inExtreme) {
+        Rec = 'This location would likely experience stormwater flooding under an extreme stormwater flooding scenario (3.66 inches per hour of rain with 2080 projected sea level rise). This means this area would likely only experience stormwater flooding with extremely high rainfall. However, these events are expected to become more frequent in the future.';
+    
+    } else if (inHundredYear) {
+        Rec = 'This area is located within the 100-year floodplain.';
+    
+    } else {
+        Rec = 'low flood risk';
+    }
+    
     return { Rec, inHundredYear };
+    
 }
 
 // === Geocoder Result Handler ===
@@ -164,10 +214,10 @@ geocoder.on('result', (e) => {
 
 // === Load GeoJSON and Add Layers ===
 map.on('load', async () => {
-    const moderateResponse = await fetch('moderate_flood_simple.json');
+    const moderateResponse = await fetch('Moderate_Flood_WGS84_Simple.json');
     moderateFloodData = await moderateResponse.json();
 
-    const extremeResponse = await fetch('extreme_flood_simple.json');
+    const extremeResponse = await fetch('Extreme_Flood_noHighTide_Dissolved.geojson');
     extremeFloodData = await extremeResponse.json();
 
     const hundredYearResponse = await fetch('FEMA_100_Year_Dissolved.json');
@@ -188,13 +238,19 @@ map.on('load', async () => {
         data: hundredYearFloodData
     });
 
+    console.log(moderateFloodData);
+    console.log(extremeFloodData);
+    console.log(hundredYearFloodData);
+    console.log(moderateFloodData.features[0].geometry.coordinates);
+
+
     map.addLayer({
         id: 'extremeFloodLayer',
         type: 'fill',
         source: 'extremeFlood',
         paint: {
             'fill-color': '#fde74c',
-            'fill-opacity': 0.5,
+            'fill-opacity': 0.3,
             'fill-outline-color': '#fde74c'
         }
     });
@@ -231,6 +287,15 @@ map.on('load', async () => {
             'line-width': 1
         }
     });
+
+    // Ensure 'settlement-subdivision-label' is on top of all flood layers
+    map.moveLayer('settlement-subdivision-label');
+
+    // Ensure 'road-label-simple' is above the data layers but below 'settlement-subdivision-label'
+    map.moveLayer('road-label-simple', 'settlement-subdivision-label'); // Place it below settlement-subdivision-label
+
+    // Ensure labels appear above data layers and move 'settlement-subdivision-label' first
+    map.moveLayer('settlement-subdivision-label', 'HundredYearFloodOutline'); // Ensure it is above all data layers
 
     document.getElementById('toggle-moderate').addEventListener('change', (e) => {
         map.setLayoutProperty('moderateFloodLayer', 'visibility', e.target.checked ? 'visible' : 'none');
