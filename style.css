@@ -128,3 +128,202 @@ body {
     scrollbar-width: thin;
     scrollbar-color: #879297 transparent;
 }
+
+
+
+/* Map full screen */
+#map-container {
+    background-color: gray;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Existing styles, unchanged below --- */
+
+#header h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+}
+
+#header-subtitle p {
+    font-size: 16px;
+    color: white;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+#search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.geocoder-container {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.mapboxgl-ctrl-geocoder {
+    min-width: 100%;
+    max-width: 100%;
+    font-size: 14px;
+}
+
+#legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 14px;
+    color: white;
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.legend-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.legend-text {
+    display: inline-block;
+    /* space between color and text */
+}
+
+.legend-subtext {
+    font-size: 12px;
+    color: #ccc;
+    text-align: left;
+    margin-left: 58px;
+    margin-top: 2px;
+    display: block;
+    width: 100%;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid white;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+    margin-right: 8px;
+    position: relative;
+    vertical-align: middle;
+    transition: border-color 0.2s ease;
+    display: inline-block;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: white;
+    border-radius: 2px;
+    transform: translate(-50%, -50%);
+}
+
+
+
+
+input[type="checkbox"]:hover {
+    border-color: #99ddff;
+}
+
+#sidebar-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
+
+#flood-risk-info {
+    font-size: 14px;
+    color: gray;
+    margin-top: 5px;
+}
+
+#flood-risk-text {
+    font-size: 14px;
+    color: gray;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+#flood-risk-resources {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+}
+
+#resource-list {
+    font-size: 14px;
+    color: gray;
+    margin-top: 5px;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.flood-status-text {
+    font-size: 14px;
+    color: white;
+    margin-top: 5px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.flood-rec-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-style: normal;
+    color: white;
+}
+
+.flood-rec-text {
+    font-size: 14px;
+    color: white;
+    margin-top: 5px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+a {
+    color: #3399FF;
+    text-decoration: none;
+    font-weight: normal;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #99ddff
+}
