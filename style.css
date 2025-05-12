@@ -52,7 +52,7 @@ body {
     pointer-events: none;
     /* so it doesn’t block clicks */
 }
-
+/*flex box layour to make the map and sidebar fill the screen */
 #flex-box {
     display: flex;
     height: 100vh;
@@ -138,7 +138,6 @@ body {
     height: 100%;
 }
 
-/* --- Existing styles, unchanged below --- */
 
 #header h1 {
     font-size: 36px;
@@ -151,6 +150,7 @@ body {
     color: white;
     margin-top: 0px;
     margin-bottom: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #search-bar {
@@ -220,6 +220,7 @@ body {
     margin-top: 2px;
     display: block;
     width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 input[type="checkbox"] {
@@ -263,10 +264,20 @@ input[type="checkbox"]:hover {
     margin-bottom: 10px;
 }
 
+.address-display {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+
 #flood-risk-info {
     font-size: 14px;
     color: gray;
     margin-top: 5px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #flood-risk-text {
@@ -274,6 +285,7 @@ input[type="checkbox"]:hover {
     color: gray;
     margin-top: 5px;
     font-style: italic;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #flood-risk-resources {
@@ -289,6 +301,7 @@ input[type="checkbox"]:hover {
     margin-top: 5px;
     font-style: italic;
     font-weight: normal;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .flood-status-text {
@@ -297,6 +310,7 @@ input[type="checkbox"]:hover {
     margin-top: 5px;
     font-style: normal;
     font-weight: normal;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .flood-rec-header {
@@ -313,6 +327,7 @@ input[type="checkbox"]:hover {
     margin-top: 5px;
     font-style: normal;
     font-weight: normal;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 a {

@@ -35,6 +35,15 @@ const geocoder = new MapboxGeocoder({
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
+geocoder.on('result', function (e) {
+    const placeName = e.result.place_name;
+    document.getElementById('selected-address').textContent = placeName;
+
+    // Optionally: scroll sidebar-interactive to the top
+    document.getElementById('sidebar-interactive').scrollTop = 0;
+});
+
+
 // === Functions === getting flood risk status and recommendations
 function getFloodRiskStatus(lngLat, moderateData, extremeData, hundredYearData) {
     const point = turf.point(lngLat);
@@ -505,6 +514,23 @@ map.on('load', async () => {
     map.setLayoutProperty('HundredYearFloodOutline', 'visibility', 'none');
 });
 
+// === clear marker on geocoder x out === //
+
+function resetSidebar() {
+    document.getElementById('selected-address').textContent = '';
+    document.getElementById('flood-risk-text').textContent = 'Search for a property on the map to see flood risk information.';
+    document.getElementById('resource-list').textContent = 'Search for a property on the map to see flood mitigation resources.';
+
+    if (searchMarker) {
+        searchMarker.remove();
+        searchMarker = null;
+    }
+}
+
+geocoder.on('clear', function () {
+    resetSidebar();
+});
+
 // === Clear Marker on Map Click ===
 map.on('click', () => {
     if (searchMarker) {
@@ -513,4 +539,8 @@ map.on('click', () => {
     }
     document.getElementById('flood-risk-text').textContent = 'Search for a property on the map to see flood risk information.';
     document.getElementById('resource-list').textContent = 'Search for a property on the map to see flood mitigation resources.';
+});
+
+map.on('click', function () {
+    resetSidebar();
 });
