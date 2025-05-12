@@ -412,13 +412,13 @@ geocoder.on('result', (e) => {
 
 // === Load GeoJSON and Add Layers ===
 map.on('load', async () => {
-    const moderateResponse = await fetch('Moderate_Flood_WGS84_Simple.json');
+    const moderateResponse = await fetch('Data/Moderate_Flood_WGS84_Simple.json');
     moderateFloodData = await moderateResponse.json();
 
-    const extremeResponse = await fetch('Extreme_Flood_noHighTide_Dissolved.geojson');
+    const extremeResponse = await fetch('Data/Extreme_Flood_noHighTide_Dissolved.geojson');
     extremeFloodData = await extremeResponse.json();
 
-    const hundredYearResponse = await fetch('FEMA_100_Year_Dissolved.json');
+    const hundredYearResponse = await fetch('Data/FEMA_100_Year_Dissolved.json');
     hundredYearFloodData = await hundredYearResponse.json();
 
     map.addSource('moderateFlood', {
