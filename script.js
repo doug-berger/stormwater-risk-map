@@ -4,7 +4,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGJlcmdlcjMyNCIsImEiOiJjbTkxejI1ODYwMGQ1Mmxvb
 if (typeof turf === 'undefined') {
     console.error('Turf.js is not loaded. Please include Turf.js in your HTML file.');
 }
-
+// Ensure Mapbox GL JS is imported
+// map bounds to NYC
 const map = new mapboxgl.Map({
     container: 'map-container',
     center: [-73.99432, 40.71103],
@@ -65,7 +66,7 @@ function getFloodRiskStatus(lngLat, moderateData, extremeData, hundredYearData) 
         if (turf.booleanIntersects(buffer, feature)) inHundredYear = true;
     });
 
-    let status;
+    let status; // Status for flood risk according to if else logic
     if (inModerate && inHundredYear) {
         status = `
         <p class = "flood-status-text"> This location would likely experience stormwater flooding under a 
@@ -109,10 +110,10 @@ function getFloodRiskStatus(lngLat, moderateData, extremeData, hundredYearData) 
 
     return { status, inHundredYear };
 }
-
+// === Function to get flood risk recommendations ===
 function getFloodRiskRec(lngLat, moderateData, extremeData, hundredYearData) {
     const point = turf.point(lngLat);
-    const buffer = turf.buffer(point, 35, { units: 'feet' });
+    const buffer = turf.buffer(point, 35, { units: 'feet' }); // 35 feet buffer around the point to account for uncertainty and marker placement.
 
     let inModerate = false;
     let inExtreme = false;
@@ -130,7 +131,7 @@ function getFloodRiskRec(lngLat, moderateData, extremeData, hundredYearData) {
         if (turf.booleanIntersects(buffer, feature)) inHundredYear = true;
     });
 
-    let Rec = ''; // Recommendations
+    let Rec = ''; // Recommendations for flood risk according to if else logic
 
     if (inModerate && inHundredYear) {
         Rec = `
@@ -410,7 +411,7 @@ geocoder.on('result', (e) => {
 
 });
 
-// === Load GeoJSON and Add Layers ===
+// === Load GeoJSON and Add Layers === //
 map.on('load', async () => {
     const moderateResponse = await fetch('Data/Moderate_Flood_WGS84_Simple.json');
     moderateFloodData = await moderateResponse.json();
@@ -436,6 +437,7 @@ map.on('load', async () => {
         data: hundredYearFloodData
     });
 
+// logging the data to check if it is loaded correctly
     console.log(moderateFloodData);
     console.log(extremeFloodData);
     console.log(hundredYearFloodData);
@@ -495,6 +497,7 @@ map.on('load', async () => {
     // Ensure labels appear above data layers and move 'settlement-subdivision-label' first
     map.moveLayer('settlement-subdivision-label', 'HundredYearFloodOutline'); // Ensure it is above all data layers
 
+// === Add event listeners for checkboxes === //
     document.getElementById('toggle-moderate').addEventListener('change', (e) => {
         map.setLayoutProperty('moderateFloodLayer', 'visibility', e.target.checked ? 'visible' : 'none');
     });
@@ -526,12 +529,12 @@ function resetSidebar() {
         searchMarker = null;
     }
 }
-
+// === Clear Marker on Geocoder (search bar) Clear === //
 geocoder.on('clear', function () {
     resetSidebar();
 });
 
-// === Clear Marker on Map Click ===
+// === Clear Marker on Map Click === //
 map.on('click', () => {
     if (searchMarker) {
         searchMarker.remove();
